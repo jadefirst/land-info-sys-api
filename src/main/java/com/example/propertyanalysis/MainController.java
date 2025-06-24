@@ -43,7 +43,7 @@ public class MainController {
 	private String kakaoApiKey;
 	
 	@Value("${molit.api.key}")
-	private String molitApiKey;
+	private String molitApiKey;  
 
 
     MainController(LawdCodeMapper lawdCodeMapper) {
