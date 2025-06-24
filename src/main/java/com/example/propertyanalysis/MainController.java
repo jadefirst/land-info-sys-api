@@ -42,7 +42,7 @@ public class MainController {
 	@Value("${kakao.api.key}")
 	private String kakaoApiKey;
 	
-	@Value("${molit.api.key}")
+	@Value("${molit.api.key}")   
 	private String molitApiKey;  
 
 
