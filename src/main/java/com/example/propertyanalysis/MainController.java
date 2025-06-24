@@ -32,6 +32,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 @RestController
+@CrossOrigin(origins = "*")
+
 public class MainController {
 
     private final LawdCodeMapper lawdCodeMapper;
