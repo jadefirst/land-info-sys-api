@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,11 +27,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "*")
 
@@ -51,13 +55,23 @@ public class MainController {
     }
 	
     
-    @CrossOrigin(origins = "http://localhost:5173")
+//    @CrossOrigin(origins = "http://localhost:5173")
 	
+//    @Cacheable(value= "investmentScore", key = "#cacheKey")
+
+    
 //	좌표를 주소로 변환
 	@PostMapping("/api/investment/score")
-	public InvestmentScoreResponse calScore(@RequestBody CoordinateRequest request) {
+    public InvestmentScoreResponse calScoreMain(@RequestBody CoordinateRequest request) {
+		String cacheKey = request.getLat() + "_" + request.getLng();
 		
-		int score = 0;
+		return calScore(cacheKey, request);
+    }
+    
+    
+    @Cacheable(value = "investmentScore", key = "#cacheKey")
+	public InvestmentScoreResponse calScore(String cacheKey, @RequestBody CoordinateRequest request) {
+		
 		String sido = "";
 		String sigungu = "";
 		String address = "";
@@ -65,6 +79,9 @@ public class MainController {
 		int facilityCount = 0;
 		
 		int distanceValue = 0;
+		
+	    System.out.println("=== 캐시 키: " + cacheKey + " ===");
+	    System.out.println("=== 실제 계산 실행됨! ===");
 		
 		
 //		String url = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=127.001409&y=37.590979";
